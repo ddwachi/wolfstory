@@ -1,0 +1,78 @@
+<html>
+<body>
+<script>
+/* test module here */
+
+var Composition = function (cstr, jbs) {
+
+  var numPlayers_ = 0;
+  var jobMap_ = {};
+  var jobs_ = jbs;
+
+  var searchRequiredJobs = function (ch) {
+    for (var job in jobs_) {
+      if (job.sName === ch) return job;
+    }
+    return null;
+  };
+
+  var set = function (str) {
+    jobMap_ = {};
+    for (var i=0; i<str.length; i++) {
+      var ch = str.charAt(i);
+      var job = searchRequiredJobs(ch);
+      if (!job || job.name === '@undefined') continue;
+
+      if (job.name in jobMap_) {
+        jobMap_[job.name].count++;
+      }
+      else {
+        jobMap_[job.name] = {
+          count: 1,
+          job: job,
+        };
+      }
+    }
+  };
+
+  var toString = function () {
+    var str = '';
+    for (var job in jobs_) {
+      if (!jobMap_[job.name]) continue;
+      
+      for (var i=0; i<jobMap_[job.name].count; i++) {
+        str += jobMap_[job.name].job.sName;
+      }
+    }
+    return str;
+  };
+
+  (function init(str) {
+    set(str);
+  })(cstr);
+
+
+  return {
+    set: set,
+    toString: toString,
+  };
+
+};
+
+
+</script>
+
+<div id='result'>
+</div>
+
+
+<script>
+/* test code here*/
+var div = document.getElementById('result');
+
+var comp = new Composition('村村村')
+
+</script>
+
+</body>
+</html>
